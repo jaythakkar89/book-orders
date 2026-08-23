@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bajarang Sweets — Festival Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FBF3E7;
+    --ivory-2:#F4E9D8;
+    --maroon:#7A1E32;
+    --maroon-dark:#5A1524;
+    --saffron:#E08A2C;
+    --saffron-light:#F3C877;
+    --pista:#6B8E4E;
+    --ink:#2B211C;
+    --ink-soft:#6b5f56;
+    --gold:#B8860B;
+    --white:#FFFFFF;
+    --radius:14px;
+    --shadow: 0 8px 24px rgba(43,33,28,0.10);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:'Mukta',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Zilla Slab',serif;
+    font-weight:700;
+    color:var(--maroon-dark);
+    margin:0;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 140px;}
+
+  /* Hero */
+  .hero{
+    background:
+      radial-gradient(circle at 85% -10%, rgba(224,138,44,0.35), transparent 55%),
+      linear-gradient(180deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+    color:var(--ivory);
+    padding:44px 20px 60px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{max-width:920px;margin:0 auto;position:relative;z-index:2;}
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:12px;
+    color:var(--saffron-light);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .hero h1{color:var(--white);font-size:38px;line-height:1.08;max-width:520px;}
+  .hero p{font-size:16px;color:#EAD9C9;max-width:440px;margin-top:12px;line-height:1.5;}
+  .hero-shop{font-size:13px;color:var(--saffron-light);margin-top:18px;letter-spacing:.02em;}
+  .brand-mark{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+  .brand-mark img{width:56px;height:56px;border-radius:50%;box-shadow:0 4px 14px rgba(0,0,0,0.25);}
+  .brand-mark .brand-text{font-family:'Zilla Slab',serif;color:var(--white);font-size:15px;font-weight:600;letter-spacing:.03em;}
+  .brand-mark .brand-text span{display:block;font-family:'Mukta',sans-serif;font-weight:400;font-size:12px;color:var(--saffron-light);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+
+  /* box signature illustration */
+  .box-signature{
+    position:absolute; right:6%; top:20px; width:180px; height:180px; z-index:1;
+    opacity:.95;
+  }
+  @media (max-width:720px){.box-signature{display:none;}}
+
+  /* Section cards */
+  .card{
+    background:var(--white);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:26px;
+    margin-top:-34px;
+    position:relative;
+    z-index:3;
+  }
+  .section{margin-top:28px;}
+  .section h2{font-size:22px;margin-bottom:4px;}
+  .section .hint{color:var(--ink-soft);font-size:14px;margin-bottom:16px;}
+
+  /* Occasion chips */
+  .chips{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{
+    padding:10px 16px;
+    border-radius:999px;
+    border:1.5px solid #E4D6C3;
+    background:var(--ivory-2);
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .15s ease;
+    user-select:none;
+  }
+  .chip.active{
+    background:var(--maroon);
+    border-color:var(--maroon);
+    color:var(--white);
+  }
+
+  /* category tabs */
+  .cat-tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .cat-tab{
+    flex:1;text-align:center;padding:10px;border-radius:10px;
+    background:var(--ivory-2);font-weight:600;font-size:14px;cursor:pointer;
+    border:1.5px solid transparent;
+  }
+  .cat-tab.active{background:var(--white);border-color:var(--pista);color:var(--pista);}
+
+  .product-list{display:flex;flex-direction:column;gap:10px;}
+  .product-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 16px;border:1px solid #EEE3D3;border-radius:12px;
+    background:var(--ivory-2);
+  }
+  .product-name{font-weight:600;font-size:15px;}
+  .product-price{color:var(--ink-soft);font-size:13px;margin-top:2px;}
+  .qty-control{display:flex;align-items:center;gap:10px;}
+  .qty-btn{
+    width:30px;height:30px;border-radius:8px;border:none;
+    background:var(--maroon);color:white;font-size:18px;font-weight:700;
+    cursor:pointer;line-height:1;
+  }
+  .qty-btn:disabled{background:#D9CBBB;cursor:default;}
+  .qty-val{min-width:54px;text-align:center;font-weight:600;font-size:14px;}
+  .qty-input-wrap{display:flex;align-items:center;gap:4px;}
+  .qty-input{
+    width:52px;text-align:center;font-weight:600;font-size:14px;
+    padding:6px 2px;border-radius:8px;border:1.5px solid #E4D6C3;
+    background:white;color:var(--ink);font-family:'Mukta',sans-serif;
+    -moz-appearance:textfield;
+  }
+  .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;
+  }
+  .qty-input:focus{outline:2px solid var(--saffron);outline-offset:1px;}
+  .qty-unit{font-size:12px;color:var(--ink-soft);}
+
+  /* form fields */
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  .field input, .field select, .field textarea{
+    width:100%;padding:11px 13px;border-radius:10px;
+    border:1.5px solid #E4D6C3;font-family:'Mukta',sans-serif;font-size:15px;
+    background:var(--ivory-2);color:var(--ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:2px solid var(--saffron);outline-offset:1px;background:white;
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:560px){.row2{grid-template-columns:1fr;}}
+
+  .fulfil-toggle{display:flex;gap:10px;margin-bottom:16px;}
+  .fulfil-btn{
+    flex:1;padding:12px;border-radius:10px;border:1.5px solid #E4D6C3;
+    background:var(--ivory-2);font-weight:600;cursor:pointer;text-align:center;
+  }
+  .fulfil-btn.active{background:var(--pista);border-color:var(--pista);color:white;}
+
+  /* advance selector */
+  .advance-options{display:flex;gap:10px;}
+  .adv-btn{
+    flex:1;padding:12px 8px;border-radius:10px;border:1.5px solid #E4D6C3;
+    background:var(--ivory-2);cursor:pointer;text-align:center;
+  }
+  .adv-btn.active{background:var(--saffron);border-color:var(--saffron);color:white;}
+  .adv-btn .pct{font-weight:700;font-size:16px;display:block;}
+  .adv-btn .lbl{font-size:11px;opacity:.85;}
+
+  /* Sticky summary bar */
+  .summary-bar{
+    position:fixed;left:0;right:0;bottom:0;
+    background:var(--white);
+    border-top:1px solid #EEE3D3;
+    box-shadow:0 -6px 20px rgba(0,0,0,0.08);
+    padding:14px 20px;
+    z-index:10;
+  }
+  .summary-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .summary-totals{font-size:13px;color:var(--ink-soft);}
+  .summary-totals b{color:var(--ink);font-size:17px;font-family:'Zilla Slab',serif;}
+  .summary-totals .adv-line{color:var(--maroon);font-weight:600;}
+  .btn-primary{
+    background:var(--maroon);color:white;border:none;padding:13px 22px;
+    border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;
+    font-family:'Mukta',sans-serif;white-space:nowrap;
+  }
+  .btn-primary:disabled{background:#D9CBBB;cursor:not-allowed;}
+  .btn-primary:hover:not(:disabled){background:var(--maroon-dark);}
+
+  .empty-note{color:var(--ink-soft);font-size:14px;padding:20px;text-align:center;background:var(--ivory-2);border-radius:10px;}
+  .rate-banner{
+    display:inline-block;font-size:13px;font-weight:700;
+    padding:7px 14px;border-radius:999px;margin-bottom:16px;
+    background:var(--ivory-2);color:var(--ink-soft);
+  }
+  .rate-banner.wholesale{background:var(--pista);color:white;}
+
+  .confirm-box{
+    background:var(--ivory-2);border:1.5px solid var(--pista);
+    border-radius:12px;padding:20px;margin-top:20px;display:none;
+  }
+  .confirm-box.show{display:block;}
+  .confirm-box h3{color:var(--pista);font-size:17px;margin-bottom:8px;}
+  .confirm-box pre{
+    white-space:pre-wrap;font-family:'Mukta',sans-serif;font-size:14px;
+    background:white;padding:14px;border-radius:8px;line-height:1.6;
+  }
+  .wa-btn{
+    display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+    background:#25D366;color:white;padding:11px 18px;border-radius:10px;
+    text-decoration:none;font-weight:700;font-size:14px;
+  }
+  .note-small{font-size:12px;color:var(--ink-soft);margin-top:14px;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <svg class="box-signature" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path d="M40 80 L100 55 L160 80 L160 150 L100 175 L40 150 Z" fill="#8C2A40" stroke="#F3C877" stroke-width="2"/>
+      <path d="M40 80 L100 105 L160 80" fill="none" stroke="#F3C877" stroke-width="2"/>
+      <path d="M100 105 L100 175" fill="none" stroke="#F3C877" stroke-width="2"/>
+      <circle cx="100" cy="90" r="8" fill="#E08A2C"/>
+      <path d="M100 82 Q104 74 112 76 Q108 84 100 82Z" fill="#6B8E4E"/>
+    </g>
+  </svg>
+  <div class="hero-inner">
+    <div class="brand-mark">
+      <img src="data:image/jpeg;base64,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" alt="Bajarang Sweets logo">
+      <div class="brand-text">Bajarang Sweets<span>Since 1968 · Dholka</span></div>
+    </div>
+    <div class="eyebrow">Festival &amp; Bulk Pre-Orders</div>
+    <h1>Book your mithai &amp; namkeen box, ahead of time.</h1>
+    <p>Reserve sweets and namkeen for Diwali, weddings, and bulk occasions — pay a small advance now, pick up fresh on your date.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+
+    <div class="section" style="margin-top:0;">
+      <h2>What's the occasion?</h2>
+      <div class="hint">This helps us plan packing and quantity.</div>
+      <div class="chips" id="occasionChips">
+        <div class="chip" data-val="Diwali">Diwali</div>
+        <div class="chip" data-val="Festival">Festival</div>
+        <div class="chip" data-val="Wedding">Wedding</div>
+        <div class="chip" data-val="Bulk Order">Bulk Order</div>
+        <div class="chip" data-val="Other">Other</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Choose your items</h2>
+      <div class="hint">Order 10kg or more (across all items) and the wholesale rate — ₹20/kg less — is applied automatically.</div>
+      <div class="rate-banner" id="rateBanner">Retail rate applied</div>
+      <div class="cat-tabs">
+        <div class="cat-tab active" data-cat="mithai">Mithai</div>
+        <div class="cat-tab" data-cat="namkeen">Namkeen</div>
+      </div>
+      <div class="product-list" id="productList"></div>
+    </div>
+
+    <div class="section">
+      <h2>Delivery details</h2>
+      <div class="fulfil-toggle" id="fulfilToggle">
+        <div class="fulfil-btn active" data-val="Pickup">Store Pickup</div>
+        <div class="fulfil-btn" data-val="Delivery">Home Delivery</div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="custName">Your name</label>
+          <input type="text" id="custName" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label for="custPhone">Phone number</label>
+          <input type="tel" id="custPhone" placeholder="10-digit mobile number">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="needDate">Needed by (date)</label>
+          <input type="date" id="needDate">
+        </div>
+      </div>
+      <div class="field" id="addressField" style="display:none;">
+        <label for="custAddress">Home address</label>
+        <textarea id="custAddress" rows="2" placeholder="Full delivery address"></textarea>
+      </div>
+      <div class="row2" id="distanceRow" style="display:none;">
+        <div class="field">
+          <label for="custDistance">Distance from Dholka (km)</label>
+          <input type="number" id="custDistance" min="0" placeholder="e.g. 150">
+        </div>
+      </div>
+      <div class="field" id="distanceWarning" style="display:none;color:var(--maroon);font-size:13px;font-weight:600;margin-top:-8px;">
+        Home delivery is only available for locations 100km or more from Dholka. For nearer locations, please choose Store Pickup.
+      </div>
+      <div class="field">
+        <label for="notes">Any notes for the shop (optional)</label>
+        <textarea id="notes" rows="2" placeholder="e.g. less sweet, specific packing, gift wrap..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Advance payment</h2>
+      <div class="hint">Confirm your order with an advance. Balance is paid on pickup/delivery.</div>
+      <div class="advance-options" id="advanceOptions">
+        <div class="adv-btn" data-pct="25"><span class="pct">25%</span><span class="lbl">Advance</span></div>
+        <div class="adv-btn active" data-pct="50"><span class="pct">50%</span><span class="lbl">Advance</span></div>
+        <div class="adv-btn" data-pct="100"><span class="pct">100%</span><span class="lbl">Full payment</span></div>
+      </div>
+    </div>
+
+    <div class="confirm-box" id="confirmBox">
+      <h3>✓ Order ready to send</h3>
+      <pre id="confirmText"></pre>
+      <a href="#" class="wa-btn" id="waLink" target="_blank" rel="noopener">Send booking to shop on WhatsApp</a>
+      <div class="note-small">This demo sends your order details to the shop's WhatsApp so they can confirm and share a UPI payment link for the advance. A live version can add a direct UPI/Razorpay checkout here.</div>
+    </div>
+
+    <div class="section" style="text-align:center;padding-top:6px;">
+      <a href="https://www.instagram.com/bajarangsweets" target="_blank" rel="noopener" style="color:var(--maroon);font-weight:600;font-size:13px;text-decoration:none;">Follow @bajarangsweets on Instagram</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="summary-bar">
+  <div class="summary-inner">
+    <div class="summary-totals">
+      Order total: <b id="totalDisplay">₹0</b><br>
+      <span class="adv-line" id="advDisplay"></span>
+    </div>
+    <button class="btn-primary" id="submitBtn" disabled>Review &amp; Book</button>
+  </div>
+</div>
+
+<script>
+const PRODUCTS = {
+  mithai: [
+    {id:'m1', name:'Kaju Katli', price:1100},
+    {id:'m2', name:'Motichoor Ladoo', price:440},
+    {id:'m3', name:'Bundi Ladoo', price:420},
+    {id:'m4', name:'Kesar Katli', price:1200},
+    {id:'m5', name:'Kesar Peda', price:480},
+    {id:'m6', name:'Mathura Peda', price:480},
+    {id:'m7', name:'Thabdi Peda', price:520},
+    {id:'m8', name:'Sihori Peda', price:520},
+    {id:'m9', name:'Kathiyawadi Peda', price:440},
+    {id:'m10', name:'Malai Peda', price:440},
+    {id:'m11', name:'Kaju Mix Mithai', price:1320},
+    {id:'m12', name:'Mava Mix Mithai', price:560},
+    {id:'m13', name:'Kala Jamun', price:320},
+    {id:'m14', name:'Gulab Jamun', price:300},
+  ],
+  namkeen: [
+    {id:'n1', name:'Mix Masala Chavanu', price:280},
+    {id:'n2', name:'Nylon Gathiya', price:280},
+    {id:'n3', name:'Fararli Chevdo (Tikhu / Mordu)', price:280},
+    {id:'n4', name:'Papdi', price:280},
+  ]
+};
+
+let state = {
+  occasion: null,
+  category: 'mithai',
+  qty: {},
+  fulfilment: 'Pickup',
+  advancePct: 50,
+};
+
+const WHOLESALE_MIN_KG = 10; // total kg across all items to unlock wholesale rate
+const WHOLESALE_DISCOUNT = 20; // ₹ less per kg once wholesale kicks in
+
+function totalQty(){
+  return Object.values(state.qty).reduce((sum, q) => sum + (q || 0), 0);
+}
+
+function isWholesale(){
+  return totalQty() >= WHOLESALE_MIN_KG;
+}
+
+function effectivePrice(p){
+  return isWholesale() ? p.price - WHOLESALE_DISCOUNT : p.price;
+}
+
+
+const productListEl = document.getElementById('productList');
+const totalDisplay = document.getElementById('totalDisplay');
+const advDisplay = document.getElementById('advDisplay');
+const submitBtn = document.getElementById('submitBtn');
+
+function renderProducts(){
+  productListEl.innerHTML = '';
+  PRODUCTS[state.category].forEach(p=>{
+    const qty = state.qty[p.id] || 0;
+    const row = document.createElement('div');
+    row.className = 'product-row';
+    row.innerHTML = `
+      <div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">₹${effectivePrice(p)} / kg</div>
+      </div>
+      <div class="qty-control">
+        <button class="qty-btn" data-id="${p.id}" data-dir="-1" ${qty<=0?'disabled':''}>−</button>
+        <div class="qty-input-wrap">
+          <input type="number" class="qty-input" data-id="${p.id}" value="${qty}" min="0" step="0.5">
+          <span class="qty-unit">kg</span>
+        </div>
+        <button class="qty-btn" data-id="${p.id}" data-dir="1">+</button>
+      </div>
+    `;
+    productListEl.appendChild(row);
+  });
+  const banner = document.getElementById('rateBanner');
+  const remaining = WHOLESALE_MIN_KG - totalQty();
+  if(isWholesale()){
+    banner.textContent = 'Wholesale rate applied (10kg+)';
+    banner.classList.add('wholesale');
+  } else {
+    banner.textContent = totalQty() > 0
+      ? `Retail rate — add ${remaining}kg more for wholesale`
+      : 'Retail rate applied';
+    banner.classList.remove('wholesale');
+  }
+}
+
+function allProducts(){
+  return [...PRODUCTS.mithai, ...PRODUCTS.namkeen];
+}
+
+function calcTotal(){
+  let total = 0;
+  allProducts().forEach(p=>{
+    const q = state.qty[p.id] || 0;
+    total += q * effectivePrice(p);
+  });
+  return total;
+}
+
+function updateSummary(){
+  const total = calcTotal();
+  totalDisplay.textContent = '₹' + total.toLocaleString('en-IN');
+  if(total > 0){
+    const adv = Math.round(total * state.advancePct / 100);
+    advDisplay.textContent = `Pay now (${state.advancePct}%): ₹${adv.toLocaleString('en-IN')}`;
+  } else {
+    advDisplay.textContent = 'Add items to see advance amount';
+  }
+  const deliveryBlocked = checkDistance();
+  submitBtn.disabled = total <= 0 || deliveryBlocked;
+}
+
+document.querySelectorAll('.cat-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    state.category = tab.dataset.cat;
+    renderProducts();
+  });
+});
+
+productListEl.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.qty-btn');
+  if(!btn) return;
+  const id = btn.dataset.id;
+  const dir = parseInt(btn.dataset.dir);
+  const current = state.qty[id] || 0;
+  const next = Math.max(0, current + dir);
+  state.qty[id] = next;
+  renderProducts();
+  updateSummary();
+});
+
+productListEl.addEventListener('change', (e)=>{
+  const input = e.target.closest('.qty-input');
+  if(!input) return;
+  const id = input.dataset.id;
+  let val = parseFloat(input.value);
+  if(isNaN(val) || val < 0) val = 0;
+  state.qty[id] = val;
+  renderProducts();
+  updateSummary();
+});
+
+document.getElementById('occasionChips').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('#occasionChips .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  state.occasion = chip.dataset.val;
+});
+
+const DELIVERY_MIN_KM = 100;
+
+function checkDistance(){
+  const showDelivery = state.fulfilment === 'Delivery';
+  document.getElementById('addressField').style.display = showDelivery ? 'block' : 'none';
+  document.getElementById('distanceRow').style.display = showDelivery ? 'flex' : 'none';
+  const dist = parseFloat(document.getElementById('custDistance').value);
+  const blocked = showDelivery && !isNaN(dist) && dist < DELIVERY_MIN_KM;
+  document.getElementById('distanceWarning').style.display = blocked ? 'block' : 'none';
+  return blocked;
+}
+
+document.getElementById('fulfilToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.fulfil-btn');
+  if(!btn) return;
+  e.currentTarget.querySelectorAll('.fulfil-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.fulfilment = btn.dataset.val;
+  updateSummary();
+});
+
+document.getElementById('custDistance').addEventListener('input', updateSummary);
+
+document.getElementById('advanceOptions').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.adv-btn');
+  if(!btn) return;
+  document.querySelectorAll('.adv-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.advancePct = parseInt(btn.dataset.pct);
+  updateSummary();
+});
+
+submitBtn.addEventListener('click', ()=>{
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const date = document.getElementById('needDate').value;
+  const address = document.getElementById('custAddress').value.trim();
+  const distance = document.getElementById('custDistance').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+
+  if(!name || !phone || !date){
+    alert('Please fill in your name, phone number, and needed-by date.');
+    return;
+  }
+
+  if(state.fulfilment === 'Delivery'){
+    if(!address){
+      alert('Please add your home address for delivery.');
+      return;
+    }
+    if(!distance){
+      alert('Please add your approximate distance from Dholka so we can confirm delivery.');
+      return;
+    }
+    if(parseFloat(distance) < DELIVERY_MIN_KM){
+      alert('Home delivery is only available for locations 100km or more from Dholka. Please choose Store Pickup instead.');
+      return;
+    }
+  }
+
+  const items = allProducts()
+    .filter(p => (state.qty[p.id] || 0) > 0)
+    .map(p => `- ${p.name}: ${state.qty[p.id]} kg (₹${effectivePrice(p)}/kg = ₹${(state.qty[p.id]*effectivePrice(p)).toLocaleString('en-IN')})`);
+
+  const total = calcTotal();
+  const advance = Math.round(total * state.advancePct / 100);
+  const rateLabel = isWholesale() ? `Wholesale (${totalQty()}kg, ₹${WHOLESALE_DISCOUNT}/kg off)` : 'Retail';
+
+  const lines = [
+    `New booking — Bajarang Sweets, Dholka`,
+    ``,
+    `Occasion: ${state.occasion || 'Not specified'}`,
+    `Name: ${name}`,
+    `Phone: ${phone}`,
+    `Needed by: ${date}`,
+    `Fulfilment: ${state.fulfilment}${state.fulfilment==='Delivery' ? ' — ' + address + ' (' + distance + 'km from Dholka)' : ''}`,
+    `Rate applied: ${rateLabel}`,
+    ``,
+    `Items:`,
+    ...items,
+    ``,
+    `Order total: ₹${total.toLocaleString('en-IN')}`,
+    `Advance to pay now (${state.advancePct}%): ₹${advance.toLocaleString('en-IN')}`,
+    notes ? `\nNotes: ${notes}` : ''
+  ].filter(Boolean).join('\n');
+
+  document.getElementById('confirmText').textContent = lines;
+  document.getElementById('confirmBox').classList.add('show');
+  document.getElementById('confirmBox').scrollIntoView({behavior:'smooth', block:'center'});
+
+  const waText = encodeURIComponent(lines);
+  document.getElementById('waLink').href = `https://wa.me/919898010533?text=${waText}`;
+});
+
+renderProducts();
+updateSummary();
+</script>
+
+</body>
+</html>
